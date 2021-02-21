@@ -61,7 +61,7 @@ function render() {
   centerImage.src = Item.all[centerIndex].path;
   centerImage.title = Item.all[centerIndex].name;
   centerImage.alt = Item.all[centerIndex].name;
-  centerImage.views = Item.all[centerIndex].votes++;
+  centerImage.views = Item.all[centerIndex].views++;
 }
 imagesSection.addEventListener('click', handleClick);
 
@@ -83,7 +83,7 @@ function handleClick(event) {
   }
 
 
-  // console.table(Item.all);
+  console.table(Item.all);
   render();
   counter--;
 }
