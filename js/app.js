@@ -27,6 +27,8 @@ const rightImage = document.getElementById('right-image');
 const centerImage = document.getElementById('center-image');
 const leftImage = document.getElementById('left-image');
 const imagesSection = document.getElementById('images-section');
+const resultsBot = document.getElementById('View-Results');
+
 // console.log(leftImage);
 // const Items = [];
 function Item(name) {
@@ -51,13 +53,13 @@ function render() {
   leftImage.views = Item.all[leftIndex].views++;
 
   const rightIndex = randomNumber(0, Item.all.length - 1);
-  // console.log('Right', rightIndex);
+  // console.log('Right', rightIndex, Item.all[leftIndex].path);
   rightImage.src = Item.all[rightIndex].path;
   rightImage.title = Item.all[rightIndex].name;
   rightImage.alt = Item.all[rightIndex].name;
   rightImage.views =Item.all[rightIndex].views++;
   const centerIndex = randomNumber(0, Item.all.length - 1);
-  // console.log('center', centerIndex);
+  // console.log('center', centerIndex, Item.all[leftIndex].path);
   centerImage.src = Item.all[centerIndex].path;
   centerImage.title = Item.all[centerIndex].name;
   centerImage.alt = Item.all[centerIndex].name;
@@ -75,15 +77,13 @@ function handleClick(event) {
         // Item.all[i].votes = Item.all[i].votes + 1;
       }
       if (!counter) {
-        document.getElementById[imagesSection].removeEventListener('click', handleClick);
+        resultsBot.addEventListener('click', handleButton);
+        imagesSection.removeEventListener('click', handleClick);
+
       }
-
-
     }
   }
-
-
-  console.table(Item.all);
+  // console.table(Item.all);
   render();
   counter--;
 }
@@ -93,5 +93,16 @@ function handleClick(event) {
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
 render();
+
+function handleButton(event) {
+  resultsBot.removeEventListener('click', handleButton);
+  console.log(event.target.id);
+  const listSection = document.getElementById('results');
+  const ulSection = document.createElement('ul');
+  listSection.appendChild(ulSection);
+  for (let i = 0; i < Item.all.length; i++) {
+    const liEl = document.createElement('li');
+    ulSection.appendChild(liEl);
+    liEl.textContent = `${Item.all[i].name.toUpperCase()} had ${Item.all[i].votes} votes with ${Item.all[i].views} views`;
+  }}
