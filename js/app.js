@@ -1,5 +1,5 @@
 'use strict';
-let counter=2;
+let counter=25;
 let preview=[];
 const names = [
   'bag.jpg',
