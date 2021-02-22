@@ -45,20 +45,22 @@ for (let i = 0; i < names.length; i++) {
 }
 // console.table(Item.all);
 function render() {
-  const leftIndex = randomNumber(0, Item.all.length - 1);
+  let leftIndex = randomNumber(0, Item.all.length - 1);
   // console.log('LEFT', leftIndex, Item.all[leftIndex].path);
   leftImage.src = Item.all[leftIndex].path;
   leftImage.title = Item.all[leftIndex].name;
   leftImage.alt = Item.all[leftIndex].name;
   leftImage.views = Item.all[leftIndex].views++;
 
-  const rightIndex = randomNumber(0, Item.all.length - 1);
+  let rightIndex = randomNumber(0, Item.all.length - 1);
   // console.log('Right', rightIndex, Item.all[leftIndex].path);
+  while (rightIndex===leftIndex){rightIndex = randomNumber(0, Item.all.length - 1);}
   rightImage.src = Item.all[rightIndex].path;
   rightImage.title = Item.all[rightIndex].name;
   rightImage.alt = Item.all[rightIndex].name;
   rightImage.views =Item.all[rightIndex].views++;
-  const centerIndex = randomNumber(0, Item.all.length - 1);
+  let centerIndex = randomNumber(0, Item.all.length - 1);
+  while(rightIndex===centerIndex || centerIndex===leftIndex||rightIndex===leftIndex){centerIndex = randomNumber(0, Item.all.length - 1);}
   // console.log('center', centerIndex, Item.all[leftIndex].path);
   centerImage.src = Item.all[centerIndex].path;
   centerImage.title = Item.all[centerIndex].name;
