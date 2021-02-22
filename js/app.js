@@ -1,5 +1,6 @@
 'use strict';
-let counter=25;
+let counter=2;
+let preview=[];
 const names = [
   'bag.jpg',
   'banana.jpg',
@@ -47,6 +48,9 @@ for (let i = 0; i < names.length; i++) {
 function render() {
   let leftIndex = randomNumber(0, Item.all.length - 1);
   // console.log('LEFT', leftIndex, Item.all[leftIndex].path);
+  while (preview.includes(leftIndex)){
+    leftIndex = randomNumber(0, Item.all.length - 1);
+  }
   leftImage.src = Item.all[leftIndex].path;
   leftImage.title = Item.all[leftIndex].name;
   leftImage.alt = Item.all[leftIndex].name;
@@ -54,18 +58,23 @@ function render() {
 
   let rightIndex = randomNumber(0, Item.all.length - 1);
   // console.log('Right', rightIndex, Item.all[leftIndex].path);
-  while (rightIndex===leftIndex){rightIndex = randomNumber(0, Item.all.length - 1);}
+  while (rightIndex===leftIndex || preview.includes(rightIndex)){rightIndex = randomNumber(0, Item.all.length - 1);}
   rightImage.src = Item.all[rightIndex].path;
   rightImage.title = Item.all[rightIndex].name;
   rightImage.alt = Item.all[rightIndex].name;
   rightImage.views =Item.all[rightIndex].views++;
   let centerIndex = randomNumber(0, Item.all.length - 1);
-  while(rightIndex===centerIndex || centerIndex===leftIndex||rightIndex===leftIndex){centerIndex = randomNumber(0, Item.all.length - 1);}
+  while(rightIndex===centerIndex || centerIndex===leftIndex||rightIndex===leftIndex || preview.includes(centerIndex)){centerIndex = randomNumber(0, Item.all.length - 1);}
   // console.log('center', centerIndex, Item.all[leftIndex].path);
   centerImage.src = Item.all[centerIndex].path;
   centerImage.title = Item.all[centerIndex].name;
   centerImage.alt = Item.all[centerIndex].name;
   centerImage.views = Item.all[centerIndex].views++;
+  preview=[];
+  preview.push(leftIndex);
+  preview.push(centerIndex);
+  preview.push(rightIndex);
+
 }
 imagesSection.addEventListener('click', handleClick);
 
@@ -81,7 +90,6 @@ function handleClick(event) {
       if (!counter) {
         resultsBot.addEventListener('click', handleButton);
         imagesSection.removeEventListener('click', handleClick);
-
       }
     }
   }
@@ -103,8 +111,64 @@ function handleButton(event) {
   const listSection = document.getElementById('results');
   const ulSection = document.createElement('ul');
   listSection.appendChild(ulSection);
+  createChart();
   for (let i = 0; i < Item.all.length; i++) {
     const liEl = document.createElement('li');
     ulSection.appendChild(liEl);
     liEl.textContent = `${Item.all[i].name.toUpperCase()} had ${Item.all[i].votes} votes with ${Item.all[i].views} views`;
-  }}
+  }
+}
+
+function createChart() {
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  const picturesName = [];
+  const vote = [];
+  const view = [];
+  for (let i = 0; i < Item.all.length; i++) {
+    picturesName.push(Item.all[i].name);
+    vote.push(Item.all[i].votes);
+    view.push(Item.all[i].views);
+  }
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: picturesName,
+      datasets: [
+        {
+          label: 'votes',
+          backgroundColor: 'red',
+          borderColor: ['rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          data: vote,
+        },
+        {
+          label: 'views',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: [
+            'rgb(255, 99, 132)'
+          ],
+          data: view,
+          options: {
+            plugins: {
+              legend: {
+                labels: { maxHeight: 10,
+                }}
+            }}
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+      plugins: {
+        legend: {
+          labels: { maxHeight: 10,
+          }}
+      }}
+  });
+}
