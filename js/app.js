@@ -1,6 +1,10 @@
 'use strict';
 let counter=25;
 let preview=[];
+
+let voteArr=[];
+let viewsArr =[];
+
 const names = [
   'bag.jpg',
   'banana.jpg',
@@ -117,6 +121,20 @@ function handleButton(event) {
     ulSection.appendChild(liEl);
     liEl.textContent = `${Item.all[i].name.toUpperCase()} had ${Item.all[i].votes} votes with ${Item.all[i].views} views`;
   }
+  localStorage.setItem('votes', JSON.stringify(voteArr));
+  localStorage.setItem('views', JSON.stringify(viewsArr));
+}
+
+
+function retrieve(){
+  // localStorage.removeItem('randid');
+  console.log(localStorage);
+
+  if(localStorage.length > 0) {
+    voteArr = JSON.parse(localStorage.getItem('votes'));
+    viewsArr = JSON.parse(localStorage.getItem('views'));
+  }
+
 }
 
 function createChart() {
@@ -125,10 +143,14 @@ function createChart() {
   const picturesName = [];
   const vote = [];
   const view = [];
+  const totalView = viewsArr;
+  const totalVotes =voteArr;
   for (let i = 0; i < Item.all.length; i++) {
     picturesName.push(Item.all[i].name);
     vote.push(Item.all[i].votes);
     view.push(Item.all[i].views);
+    voteArr[i] += vote[i];
+    viewsArr[i] +=view[i];
   }
   new Chart(ctx, {
     type: 'bar',
@@ -145,7 +167,7 @@ function createChart() {
             'rgba(153, 102, 255, 1)',
             'rgba(255, 159, 64, 1)'
           ],
-          data: vote,
+          data: totalVotes,
         },
         {
           label: 'views',
@@ -153,7 +175,7 @@ function createChart() {
           borderColor: [
             'rgb(255, 99, 132)'
           ],
-          data: view,
+          data: totalView,
           options: {
             plugins: {
               legend: {
@@ -172,3 +194,4 @@ function createChart() {
       }}
   });
 }
+retrieve();
